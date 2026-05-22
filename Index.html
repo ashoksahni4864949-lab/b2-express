@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primeboostmedia | Premium Meta & Google Ads Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6', 
+                        secondary: '#1e293b', 
+                        dark: '#0f172a', 
+                        accent: '#8b5cf6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+            /* Hide scrollbar for cleaner look but keep functionality */
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 #0f172a;
+        }
+        
+        /* 3D Canvas Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none; /* Allows clicking through the canvas */
+            will-change: transform; /* Hardware Acceleration for 60FPS */
+        }
+        #canvas-container canvas {
+            display: block;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Glassmorphism Classes for Ultra-Premium Look */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 1) !important;
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.8), inset 0 0 20px rgba(59, 130, 246, 0.4) !important;
+        }
+
+        /* Dynamic Scroll Reveal Animations */
+        .reveal-up { opacity: 0; transform: translateY(50px); transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms), transform 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms); }
+        .reveal-left { opacity: 0; transform: translateX(-50px); transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms), transform 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms); }
+        .reveal-right { opacity: 0; transform: translateX(50px); transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms), transform 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms); }
+        .reveal-scale { opacity: 0; transform: scale(0.8); transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms), transform 0.8s cubic-bezier(0.5, 0, 0, 1) var(--delay, 0ms); }
+        
+        .reveal-up.active, .reveal-left.active, .reveal-right.active, .reveal-scale.active {
+            opacity: 1;
+            transform: translate(0) scale(1);
+        }
+
+        /* Floating Animation for Elements */
+        .float-anim {
+            animation: floating 3s ease-in-out infinite;
+        }
+        .float-anim-delay {
+            animation: floating 3s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Custom Animated Premium Button */
+        .btn-premium {
+            background: linear-gradient(#0f172a, #0f172a) padding-box,
+                        linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6) border-box;
+            border: 2px solid transparent;
+            border-radius: 9999px;
+            background-size: 200% auto;
+            animation: gradientMove 3s linear infinite;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 25px rgba(59,130,246,0.4);
+        }
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 40%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-20deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+        .btn-premium:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(139,92,246,0.6);
+        }
+        .arrow-bounce {
+            animation: arrowBounce 1.5s ease-in-out infinite;
+        }
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(6px); }
+        }
+
+        /* --- PREMIUM CUSTOM CURSOR --- */
+        @media (pointer: fine) { 
+            body, a, button, input {
+                cursor: none !important; 
+            }
+            #cursor-dot {
+                position: fixed;
+                top: 0; left: 0;
+                width: 6px; height: 6px;
+                background-color: white;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 9999999; 
+                mix-blend-mode: difference; 
+                transition: width 0.1s, height 0.1s; /* Ultra fast transition */
+            }
+            #cursor-ring {
+                position: fixed;
+                top: 0; left: 0;
+                width: 40px; height: 40px;
+                border: 1px solid rgba(59, 130, 246, 0.6);
+                background: rgba(59, 130, 246, 0.05);
+                backdrop-filter: blur(3px);
+                -webkit-backdrop-filter: blur(3px);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 9999998; 
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+                transition: width 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                            height 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                            background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+                will-change: transform;
+            }
+            #cursor-ring.hovered {
+                width: 70px;
+                height: 70px;
+                background: rgba(139, 92, 246, 0.15); 
+                border-color: rgba(139, 92, 246, 0.8);
+                box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+            }
+            #cursor-ring.clicked {
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            
+            /* --- FLASH LIGHT TRAIL --- */
+            .cursor-trail {
+                position: fixed;
+                top: 0; left: 0;
+                width: 12px; height: 12px;
+                border-radius: 50%;
+                background: #3b82f6;
+                box-shadow: 0 0 10px #3b82f6, 0 0 20px #8b5cf6, 0 0 40px #8b5cf6;
+                pointer-events: none;
+                z-index: 9999997; 
+                mix-blend-mode: screen;
+                will-change: transform, opacity;
+            }
+        }
+
+        /* --- 8K DYNAMIC PRELOADER --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #020617; 
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, transform 1s cubic-bezier(0.8, 0, 0.2, 1), filter 0.6s ease;
+            overflow: hidden;
+        }
+        #preloader::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(59,130,246,0.15) 0%, transparent 60%);
+            animation: pulseBg 2s ease-in-out infinite alternate;
+        }
+        @keyframes pulseBg { 0% { opacity: 0.4; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
+
+        #preloader.loaded {
+            opacity: 0;
+            pointer-events: none; 
+            transform: scale(6); 
+            filter: blur(30px);
+        }
+        
+        /* 8K Glowing Orb Structure */
+        .loader-orb {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 20px rgba(59,130,246,0.4));
+        }
+        .orb-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+        /* Outer HDR Ring */
+        .orb-ring:nth-child(1) { 
+            border-top: 3px solid #3b82f6; border-right: 3px solid rgba(59, 130, 246, 0.1); 
+            animation: spinOrb 1s linear infinite; 
+            box-shadow: 0 0 15px #3b82f6 inset, 0 0 15px #3b82f6; 
+        }
+        /* Middle HDR Ring */
+        .orb-ring:nth-child(2) { 
+            inset: 15px; border-bottom: 3px solid #8b5cf6; border-left: 3px solid rgba(139, 92, 246, 0.1); 
+            animation: spinOrbReverse 1.5s linear infinite; 
+            box-shadow: 0 0 15px #8b5cf6 inset, 0 0 15px #8b5cf6; 
+        }
+        /* Inner Fast Ring */
+        .orb-ring:nth-child(3) { 
+            inset: 30px; border-top: 3px solid #ffffff; border-bottom: 3px solid #ffffff; 
+            animation: spinOrb 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; 
+            opacity: 0.5;
+        }
+        
+        .orb-core {
+            width: 50px; height: 50px;
+            background: radial-gradient(circle, #ffffff 0%, #3b82f6 40%, #8b5cf6 100%);
+            border-radius: 50%;
+            animation: pulseCore 1s infinite alternate;
+            box-shadow: 0 0 30px #ffffff, 0 0 60px #3b82f6, 0 0 100px #8b5cf6; 
+        }
+
+        @keyframes spinOrb { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spinOrbReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(-360deg); } }
+        @keyframes pulseCore { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.2); opacity: 1; filter: brightness(1.5); } }
+
+        .loader-brand {
+            margin-top: 50px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #3b82f6, #8b5cf6, #ffffff);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 2s linear infinite;
+            z-index: 10;
+        }
+        
+        .loader-progress-wrap {
+            margin-top: 30px;
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+        .loader-bar-bg {
+            width: 100%; height: 3px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+        .loader-bar-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ffffff);
+            box-shadow: 0 0 15px #3b82f6, 0 0 30px #8b5cf6;
+            border-radius: 3px;
+        }
+        .loader-percentage {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-variant-numeric: tabular-nums;
+        }
+        .loader-percentage span {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-primary selection:text-white">
+
+    <!-- WORLD CLASS 8K PRELOADER -->
+    <div id="preloader">
+        <div class="loader-orb">
+            <div class="orb-ring"></div>
+            <div class="orb-ring"></div>
+            <div class="orb-ring"></div>
+            <div class="orb-core"></div>
+        </div>
+        <div class="loader-brand">Primeboostmedia</div>
+        <div class="loader-progress-wrap">
+            <div class="loader-bar-bg">
+                <div class="loader-bar-fill" id="loader-bar-fill"></div>
+            </div>
+            <div class="loader-percentage"><span id="loader-percentage-text">0</span>% SYSTEM INIT</div>
+        </div>
+    </div>
+
+    <!-- Premium Custom Cursor Elements -->
+    <div id="cursor-dot" class="hidden md:block"></div>
+    <div id="cursor-ring" class="hidden md:block"></div>
+
+    <!-- 3D Background Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Navbar (Glassmorphism) -->
+    <nav class="fixed w-full z-50 glass-panel border-b-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
+                    <i class="fa-solid fa-meteor text-primary text-2xl group-hover:rotate-12 transition-transform"></i>
+                    <span class="font-bold text-2xl tracking-tight text-white">Primeboost<span class="text-primary">media</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-primary transition-colors px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="#about" class="hover:text-primary transition-colors px-3 py-2 text-sm font-medium">About</a>
+                        <a href="#services" class="hover:text-primary transition-colors px-3 py-2 text-sm font-medium">Services</a>
+                        <button onclick="openWaModal()" class="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-medium text-white bg-primary rounded-full group shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_25px_rgba(59,130,246,0.8)] transition-all">
+                            <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                            <span class="relative flex items-center"><i class="fa-brands fa-whatsapp mr-2 text-green-400 group-hover:text-white transition-colors text-lg"></i>Let's Connect</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-white/10">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <a href="#home" class="block hover:bg-white/10 text-white px-3 py-2 rounded-lg text-base font-medium">Home</a>
+                <a href="#about" class="block hover:bg-white/10 text-white px-3 py-2 rounded-lg text-base font-medium">About</a>
+                <a href="#services" class="block hover:bg-white/10 text-white px-3 py-2 rounded-lg text-base font-medium">Services</a>
+                <button onclick="openWaModal()" class="w-full text-left text-primary font-bold px-3 py-2 text-base flex items-center"><i class="fa-brands fa-whatsapp mr-2 text-green-400 text-lg"></i>Let's Connect</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-24 pb-12 lg:pt-56 lg:pb-32 overflow-hidden min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center z-10 w-full">
+            <div class="reveal-up inline-flex items-center gap-2 px-4 py-1.5 lg:px-5 lg:py-2 rounded-full glass-panel border-white/10 text-xs lg:text-sm font-medium text-blue-400 mb-6 mx-auto backdrop-blur-xl">
+                <span class="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_#3b82f6]"></span>
+                World's No.1 Premium Ad Strategy
+            </div>
+            <h1 class="reveal-up text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-tight mb-4 lg:mb-6 leading-tight drop-shadow-2xl" style="--delay: 100ms;">
+                Scale your brand with <br class="hidden md:block" />
+                <span class="gradient-text">dynamic data.</span>
+            </h1>
+            <p class="reveal-up mt-4 max-w-2xl mx-auto text-lg lg:text-xl text-slate-300 mb-8 lg:mb-12 font-light px-2" style="--delay: 200ms;">
+                Stop guessing with your ad budget. Partner with an elite agency that has proven experience in delivering unprecedented ROI.
+            </p>
+            <div class="reveal-up flex flex-col sm:flex-row justify-center gap-4 lg:gap-6" style="--delay: 300ms;">
+                <button onclick="openWaModal()" class="btn-premium inline-flex items-center justify-center px-8 py-4 lg:px-10 lg:py-5 font-extrabold text-white text-lg lg:text-xl tracking-wide group z-10">
+                    <span class="relative z-10 flex items-center">
+                        <i class="fa-brands fa-whatsapp mr-2 lg:mr-3 text-green-400 group-hover:text-white transition-colors text-xl lg:text-2xl"></i>
+                        WhatsApp Us 
+                        <i class="fa-solid fa-arrow-right ml-2 lg:ml-3 arrow-bounce text-blue-400 group-hover:text-white transition-colors"></i>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Stats Row -->
+            <div id="stats-section" class="mt-12 lg:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto">
+                <div class="glass-card p-6 rounded-2xl reveal-up" style="--delay: 400ms;">
+                    <h3 class="text-4xl lg:text-5xl font-bold text-white mb-2"><span class="stat-counter" data-target="7">0</span>+</h3>
+                    <p class="text-blue-400 font-medium">Years of Mastery</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl reveal-up" style="--delay: 500ms;">
+                    <h3 class="text-4xl lg:text-5xl font-bold text-white mb-2">₹<span class="stat-counter" data-target="1">0</span> Cr+</h3>
+                    <p class="text-purple-400 font-medium">Ad Spend Managed</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl reveal-up" style="--delay: 600ms;">
+                    <h3 class="text-4xl lg:text-5xl font-bold text-white mb-2"><span class="stat-counter" data-target="100">0</span>%</h3>
+                    <p class="text-green-400 font-medium">ROI Focused</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                <div class="mb-12 lg:mb-0 reveal-left">
+                    <div class="relative rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl border border-white/10 group float-anim">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="bg-slate-900/60 h-[450px] w-full rounded-2xl flex flex-col items-center justify-center relative overflow-hidden backdrop-blur-md">
+                            <!-- Animated Data Rings inside the image placeholder -->
+                            <div class="absolute w-64 h-64 border border-blue-500/30 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                            <div class="absolute w-48 h-48 border border-purple-500/40 rounded-full animate-[spin_7s_linear_infinite_reverse]"></div>
+                            
+                            <i class="fa-solid fa-chart-line text-7xl text-blue-400 mb-6 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)] z-10 float-anim-delay"></i>
+                            <h3 class="text-3xl font-bold text-white z-10">Experience. Data. Results.</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal-right">
+                    <h2 class="text-primary font-semibold tracking-widest uppercase text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-yellow-400"></i> About Primeboostmedia
+                    </h2>
+                    <h3 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">Elite Performance Agency.</h3>
+                    <p class="text-slate-300 text-lg mb-6 leading-relaxed font-light">
+                        Digital marketing ki duniya mein guess-work nahi, data aur experience kaam aata hai. Primeboostmedia mein, humne pichle 7+ saalon mein market ke har trend ko decode kiya hai. 
+                    </p>
+                    <p class="text-slate-300 text-lg mb-10 leading-relaxed font-light">
+                        Ab tak hum <strong>₹1 Crore+</strong> ka ad spend successfully manage kar chuke hain. Humara focus sirf clicks lana nahi hai, balki aapke brand ke liye high-ticket conversions generate karna hai.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="glass-card p-4 rounded-xl flex items-start gap-4 hover:-translate-y-2 transition-transform duration-300">
+                            <div class="mt-1 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-bullseye text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold">Laser Targeting</h4>
+                                <p class="text-sm text-slate-400 mt-1">Reaching the absolute exact audience.</p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl flex items-start gap-4 hover:-translate-y-2 transition-transform duration-300">
+                            <div class="mt-1 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-rocket text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold">Rapid Scaling</h4>
+                                <p class="text-sm text-slate-400 mt-1">Tested & proven growth blueprints.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal-up">
+                <h2 class="text-primary font-semibold tracking-widest uppercase text-sm mb-3">Our Arsenal</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Platform Supremacy</h3>
+                <p class="text-slate-300 text-lg font-light">Hum un systems par dominate karte hain jo duniya ka sabse zyada traffic control karte hain.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Meta Ads -->
+                <div class="glass-card p-10 rounded-3xl group reveal-scale relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/40 transition-colors duration-500"></div>
+                    <div class="w-20 h-20 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300 backdrop-blur-md float-anim">
+                        <i class="fa-brands fa-meta text-5xl bg-gradient-to-tr from-[#0668E1] to-[#D138B6] bg-clip-text text-transparent inline-block"></i>
+                    </div>
+                    <h4 class="text-3xl font-bold text-white mb-4">Meta Ecosystem</h4>
+                    <p class="text-slate-300 mb-8 font-light text-lg">
+                        Facebook & Instagram domination. Advanced AI targeting aur creative hooks ke through hum aapke brand ko viral growth dete hain.
+                    </p>
+                    <ul class="space-y-4 text-slate-300 font-medium">
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center"><i class="fa-solid fa-check text-primary text-xs"></i></span> High-RoAS E-commerce</li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center"><i class="fa-solid fa-check text-primary text-xs"></i></span> Premium Lead Generation</li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center"><i class="fa-solid fa-check text-primary text-xs"></i></span> Advanced Pixel Retargeting</li>
+                    </ul>
+                </div>
+
+                <!-- Google Ads -->
+                <div class="glass-card p-10 rounded-3xl group reveal-scale relative overflow-hidden" style="--delay: 150ms;">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-red-500/20 rounded-full blur-3xl group-hover:bg-red-500/40 transition-colors duration-500"></div>
+                    <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-red-800 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-red-500/30 group-hover:scale-110 transition-transform duration-300 float-anim-delay">
+                        <i class="fa-brands fa-google text-4xl text-white"></i>
+                    </div>
+                    <h4 class="text-3xl font-bold text-white mb-4">Google Search Network</h4>
+                    <p class="text-slate-300 mb-8 font-light text-lg">
+                        Capture high-intent traffic directly from the world's biggest search engine. Un customers ko target karein jo aapko dhoond rahe hain.
+                    </p>
+                    <ul class="space-y-4 text-slate-300 font-medium">
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center"><i class="fa-solid fa-check text-red-500 text-xs"></i></span> Search & Display Campaigns</li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center"><i class="fa-solid fa-check text-red-500 text-xs"></i></span> Performance Max & YouTube</li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center"><i class="fa-solid fa-check text-red-500 text-xs"></i></span> Competitor Keyword Hijacking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA Section -->
+    <section id="contact" class="py-32 relative z-10 overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 relative z-10 text-center reveal-scale">
+            <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">Ignite Your Revenue.</h2>
+            <p class="text-xl text-slate-300 mb-12 font-light">
+                Ek 15-minute ki call aur aapke brand ki custom blueprint ready. No fluff, just pure scaling strategy.
+            </p>
+            <div class="glass-panel p-10 md:p-12 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-lg mx-auto relative overflow-hidden float-anim">
+                <!-- Decorative glow inside form -->
+                <div class="absolute -top-24 -left-24 w-48 h-48 bg-primary/30 rounded-full blur-[50px]"></div>
+                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-accent/30 rounded-full blur-[50px]"></div>
+                
+                <form class="relative z-10" id="contactForm">
+                    <div class="mb-5 text-left">
+                        <label class="block text-xs font-semibold tracking-wide uppercase text-slate-400 mb-2">Full Name</label>
+                        <!-- FIX: Added 'text-base sm:text-sm' to prevent iPhone auto-zoom bug -->
+                        <input type="text" id="contactName" class="w-full bg-slate-900/50 border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder-white/20 text-base sm:text-sm" placeholder="John Doe" required>
+                    </div>
+                    <div class="mb-5 text-left">
+                        <label class="block text-xs font-semibold tracking-wide uppercase text-slate-400 mb-2">Business Email / Phone</label>
+                        <!-- FIX: Added 'text-base sm:text-sm' -->
+                        <input type="text" id="contactInfo" class="w-full bg-slate-900/50 border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder-white/20 text-base sm:text-sm" placeholder="contact@brand.com" required>
+                    </div>
+                    <div class="mb-8 text-left">
+                        <label class="block text-xs font-semibold tracking-wide uppercase text-slate-400 mb-2">Website URL</label>
+                        <!-- FIX: Added 'text-base sm:text-sm' -->
+                        <input type="url" id="contactUrl" class="w-full bg-slate-900/50 border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder-white/20 text-base sm:text-sm" placeholder="https://" required>
+                    </div>
+                    <button type="submit" class="w-full btn-premium font-semibold py-4 px-4 text-white flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-green-300 text-xl"></i> Unlock Growth on WhatsApp
+                    </button>
+                    
+                    <!-- Custom Success Message Modal/Alert -->
+                    <div id="successMessage" class="hidden mt-5 p-4 bg-green-500/20 border border-green-500/50 rounded-xl text-green-400 font-medium text-sm text-center backdrop-blur-sm transition-all">
+                        <i class="fa-solid fa-circle-check mr-2"></i> Premium Inquiry Sent! Our experts will connect with you.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 glass-panel border-t border-white/10 py-12 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <i class="fa-solid fa-meteor text-primary text-xl group-hover:rotate-45 transition-transform duration-500"></i>
+                <span class="font-bold text-xl text-white tracking-tight">Primeboost<span class="text-primary">media</span></span>
+            </div>
+            <p class="text-slate-400 text-sm font-light">
+                &copy; 2024 Primeboostmedia. Elevating Brands Globally.
+            </p>
+            <div class="flex gap-4">
+                <a href="https://www.instagram.com/prime_boostmedia/" target="_blank" class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white hover:text-primary hover:-translate-y-1 transition-all">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </a>
+                <a href="#" class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white hover:text-primary hover:-translate-y-1 transition-all">
+                    <i class="fa-brands fa-linkedin-in text-xl"></i>
+                </a>
+                <button onclick="openWaModal()" class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white hover:text-green-400 hover:-translate-y-1 transition-all">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Verification Modal for Quality Leads -->
+    <div id="waModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center backdrop-blur-md bg-dark/80 px-4 transition-opacity duration-300 opacity-0">
+        <div class="glass-panel p-8 rounded-3xl max-w-sm w-full border border-white/20 shadow-[0_0_40px_rgba(0,0,0,0.5)] transform scale-95 transition-transform duration-300 relative overflow-hidden" id="waModalContent">
+            <!-- Decorative blur -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/20 rounded-full blur-2xl"></div>
+            
+            <div class="flex justify-between items-center mb-6 relative z-10">
+                <h4 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-brands fa-whatsapp text-green-400"></i> Connect</h4>
+                <button onclick="closeWaModal()" class="text-slate-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <p class="text-slate-400 text-sm mb-6 font-light relative z-10 leading-relaxed">Please enter your name to verify you are a human and proceed to WhatsApp.</p>
+            <form id="waVerifyForm" class="relative z-10">
+                <!-- FIX: Changed text-sm to text-base sm:text-sm to prevent iPhone zoom -->
+                <input type="text" id="waName" placeholder="Enter your full name" class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-5 py-4 mb-4 text-white text-base sm:text-sm focus:outline-none focus:border-green-500/50 focus:ring-1 focus:ring-green-500/50 transition-all" required>
+                <button type="submit" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                    Open WhatsApp <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // --- High-Intent WhatsApp Modal Logic ---
+        function openWaModal() {
+            document.body.style.overflow = 'hidden'; // FIX: Background scroll lock jab modal open ho
+            const modal = document.getElementById('waModal');
+            const content = document.getElementById('waModalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeWaModal() {
+            document.body.style.overflow = ''; // FIX: Scroll wapas open karna jab modal close ho
+            const modal = document.getElementById('waModal');
+            const content = document.getElementById('waModalContent');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        document.getElementById('waVerifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('waName').value;
+            console.log("High Intent Lead Verified! Firing Conversion Pixel...");
+            const message = encodeURIComponent(`Hi Primeboostmedia, I am ${name}. I would like to scale my business.`);
+            window.open(`https://wa.me/919729936623?text=${message}`, '_blank');
+            closeWaModal();
+            this.reset();
+        });
+
+        // --- 1. Mobile Menu Toggle (BUG FIXED) ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        
+        // Fix: Select both 'a' tags and 'button' so the menu closes on ANY click
+        menu.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => menu.classList.add('hidden'));
+        });
+
+        // FIX: Removed the duplicate duplicate 'document.body.style.overflow = "hidden"' lines
+        // --- PRELOADER & SCROLL REVEAL LOGIC ---
+        document.body.style.overflow = 'hidden'; // Lock scroll
+        
+        const revealElements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale');
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        let is3DActive = false; // 3D Sleep Mode Flag
+
+        // Cinematic 60FPS Preloader Animation
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const barFill = document.getElementById('loader-bar-fill');
+            const percentageText = document.getElementById('loader-percentage-text');
+            
+            let startTime = null;
+            const duration = 1200; // Fast 1.2s
+            
+            const easeOutQuart = (t) => 1 - (--t) * t * t * t;
+
+            const updateLoader = (timestamp) => {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                let progress = elapsed / duration;
+
+                if (progress >= 1) progress = 1;
+
+                const easedProgress = easeOutQuart(progress) * 100;
+
+                barFill.style.width = `${easedProgress}%`;
+                percentageText.innerText = Math.floor(easedProgress);
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateLoader);
+                } else {
+                    setTimeout(() => {
+                        preloader.classList.add('loaded');
+                        document.body.style.overflow = ''; // Release scroll
+                        
+                        // Wake up 3D Engine right as preloader fades out
+                        if (!is3DActive) {
+                            is3DActive = true;
+                            animate(); 
+                        }
+
+                        setTimeout(() => {
+                            revealElements.forEach(el => revealObserver.observe(el));
+                        }, 300); 
+                    }, 100);
+                }
+            };
+
+            requestAnimationFrame(updateLoader);
+        });
+
+        // Stat Counter Logic
+        const counters = document.querySelectorAll('.stat-counter');
+        let hasCounted = false;
+        const statObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !hasCounted) {
+                hasCounted = true;
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; 
+                    const step = target / (duration / 16);
+                    let current = 0;
+                    
+                    const updateCount = () => {
+                        current += step;
+                        if(current < target) {
+                            counter.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                });
+            }
+        }, { threshold: 0.5 });
+        
+        const statsSec = document.getElementById('stats-section');
+        if(statsSec) statObserver.observe(statsSec);
+
+        // --- 3. Dynamic Navbar Background ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg', 'border-b', 'border-white/10');
+            } else {
+                nav.classList.remove('shadow-lg', 'border-b', 'border-white/10');
+            }
+        });
+
+        // --- 4. THREE.JS 3D BACKGROUND & GYRO SYSTEM ---
+        const container = document.getElementById('canvas-container');
+        
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0f172a, 0.015);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        // FIX: Force 1x pixel ratio on mobile for ultra-smooth rendering, 1.5x max on desktop
+        renderer.setPixelRatio(window.innerWidth < 768 ? 1 : Math.min(window.devicePixelRatio, 1.5)); 
+        container.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        
+        const pointLight1 = new THREE.PointLight(0x3b82f6, 1.5, 100);
+        pointLight1.position.set(20, 20, 20);
+        scene.add(pointLight1);
+        
+        const pointLight2 = new THREE.PointLight(0x8b5cf6, 1.5, 100);
+        pointLight2.position.set(-20, -20, 20);
+        scene.add(pointLight2);
+
+        const group = new THREE.Group();
+        scene.add(group);
+
+        // Restored High-Quality Geometry
+        const geoDisc = new THREE.CylinderGeometry(1, 1, 0.05, 64); 
+
+        // Restored Ultra-Premium Real Glass Material
+        const matGlassBlue = new THREE.MeshPhysicalMaterial({
+            color: 0x3b82f6, metalness: 0.1, roughness: 0.1, 
+            transparent: true, opacity: 0.4, clearcoat: 1.0, 
+            transmission: 0.8, thickness: 0.5
+        });
+        const matGlassPurple = new THREE.MeshPhysicalMaterial({
+            color: 0x8b5cf6, metalness: 0.1, roughness: 0.1, 
+            transparent: true, opacity: 0.4, clearcoat: 1.0,
+            transmission: 0.8, thickness: 0.5
+        });
+        const matGlassDark = new THREE.MeshPhysicalMaterial({
+            color: 0x1e293b, metalness: 0.5, roughness: 0.2,
+            transparent: true, opacity: 0.5, clearcoat: 1.0
+        });
+
+        const materials = [matGlassBlue, matGlassPurple, matGlassDark];
+        for (let i = 0; i < 5; i++) {
+            const mat = materials[Math.floor(Math.random() * materials.length)];
+            const mesh = new THREE.Mesh(geoDisc, mat);
+            
+            mesh.position.x = (Math.random() - 0.5) * 40;
+            mesh.position.y = (Math.random() - 0.5) * 40;
+            mesh.position.z = (Math.random() - 0.5) * 20 - 5;
+            
+            mesh.rotation.x = Math.random() * Math.PI;
+            mesh.rotation.y = Math.random() * Math.PI;
+            mesh.rotation.z = Math.random() * Math.PI;
+            
+            const scale = Math.random() * 6.0 + 5.0; 
+            mesh.scale.set(scale, scale, scale);
+            
+            mesh.userData = {
+                yOffset: Math.random() * Math.PI * 2,
+                yLimit: Math.random() * 0.03 + 0.01,
+                rotSpeedX: (Math.random() - 0.5) * 0.01,
+                rotSpeedY: (Math.random() - 0.5) * 0.01
+            };
+            
+            group.add(mesh);
+        }
+
+        // --- GYRO & MOUSE PARALLAX SYSTEM ---
+        let targetX = 0;
+        let targetY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            targetX = (event.clientX - windowHalfX) * 0.02;
+            targetY = (event.clientY - windowHalfY) * 0.02;
+        });
+
+        // --- ADVANCED iOS GYRO SYSTEM ---
+        let gyroEnabled = false;
+
+        function handleOrientation(event) {
+            // Null check is important for iOS
+            if(event.gamma !== null && event.beta !== null) {
+                let gamma = event.gamma; 
+                let beta = event.beta;
+                
+                // Keeping values stable
+                if (gamma > 90) gamma = 90;
+                if (gamma < -90) gamma = -90;
+
+                targetX = gamma * 0.5; 
+                targetY = (beta - 45) * 0.5; 
+            }
+        }
+
+        function initGyro() {
+            if (gyroEnabled) return; // Agar on ho gaya to baar-baar nahi chalega
+            
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // iOS 13+ devices need explicit permission on a user action
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation, true);
+                            gyroEnabled = true;
+                        }
+                    })
+                    .catch((err) => {
+                        console.log("Gyro Error: Ensure site is running on HTTPS", err);
+                    }); 
+            } else if (window.DeviceOrientationEvent) {
+                // Non-iOS 13+ devices (Android etc.)
+                window.addEventListener('deviceorientation', handleOrientation, true);
+                gyroEnabled = true;
+            }
+        }
+
+        // Attached to touchend and click for maximum iOS compatibility
+        document.body.addEventListener('click', initGyro);
+        document.body.addEventListener('touchend', initGyro);
+
+        window.addEventListener('resize', () => {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (-targetY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            group.rotation.y = time * 0.05;
+
+            group.children.forEach(child => {
+                child.rotation.x += child.userData.rotSpeedX;
+                child.rotation.y += child.userData.rotSpeedY;
+                child.position.y += Math.sin(time + child.userData.yOffset) * child.userData.yLimit;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // --- FORM SUBMISSION HANDLER ---
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const info = document.getElementById('contactInfo').value;
+            const url = document.getElementById('contactUrl').value;
+            
+            const message = encodeURIComponent(`Hi Primeboostmedia, I am ${name}.\nMy Contact: ${info}\nWebsite: ${url}\n\nI would like to get a custom growth blueprint for my brand.`);
+            window.open(`https://wa.me/919729936623?text=${message}`, '_blank');
+            
+            const msg = document.getElementById('successMessage');
+            msg.classList.remove('hidden');
+            this.reset();
+            
+            setTimeout(() => {
+                msg.classList.add('hidden');
+            }, 4000);
+        });
+
+        // HATA DIYA GAYA HAI: Niche wala code hataya kyunki ab 3D engine loading ke baad start hoga
+        // if (document.readyState === 'complete' || document.readyState === 'interactive') { animate(); } ...
+
+        // --- CUSTOM CURSOR LOGIC ---
+        if (window.matchMedia("(pointer: fine)").matches) {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+
+            const trailCount = 15; 
+            const trails = [];
+            for (let i = 0; i < trailCount; i++) {
+                const div = document.createElement('div');
+                div.className = 'cursor-trail hidden md:block';
+                document.body.appendChild(div);
+                trails.push({ element: div, x: mouseX, y: mouseY });
+            }
+
+            // Real-time Instant update (Zero Delay)
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+                if (!cursorRing.classList.contains('clicked')) {
+                    cursorRing.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+                }
+            });
+
+            const renderCursor = () => {
+                let prevX = mouseX;
+                let prevY = mouseY;
+                
+                for (let i = 0; i < trailCount; i++) {
+                    // Trail speed increased from 0.4 to 0.65 for tighter flash feel
+                    trails[i].x += (prevX - trails[i].x) * 0.65;
+                    trails[i].y += (prevY - trails[i].y) * 0.65;
+                    
+                    const scale = 1 - (i / trailCount); 
+                    const opacity = 1 - (i / trailCount); 
+                    
+                    trails[i].element.style.transform = `translate(calc(${trails[i].x}px - 50%), calc(${trails[i].y}px - 50%)) scale(${scale})`;
+                    trails[i].element.style.opacity = opacity;
+                    
+                    prevX = trails[i].x;
+                    prevY = trails[i].y;
+                }
+
+                requestAnimationFrame(renderCursor);
+            };
+            renderCursor();
+
+            document.addEventListener('mouseleave', () => {
+                cursorDot.style.opacity = '0';
+                cursorRing.style.opacity = '0';
+                trails.forEach(t => t.element.style.opacity = '0');
+            });
+            document.addEventListener('mouseenter', () => {
+                cursorDot.style.opacity = '1';
+                cursorRing.style.opacity = '1';
+                trails.forEach(t => t.element.style.opacity = '1');
+            });
+
+            const interactables = document.querySelectorAll('a, button, input');
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorRing.classList.add('hovered');
+                    cursorDot.style.width = '8px';
+                    cursorDot.style.height = '8px';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorRing.classList.remove('hovered');
+                    cursorDot.style.width = '6px';
+                    cursorDot.style.height = '6px';
+                });
+            });
+
+            window.addEventListener('mousedown', () => {
+                cursorRing.classList.add('clicked');
+                // Use exact mouseX and mouseY for instant click scale
+                cursorRing.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) scale(0.7)`;
+            });
+            window.addEventListener('mouseup', () => {
+                cursorRing.classList.remove('clicked');
+                cursorRing.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+            });
+        }
+    </script>
+</body>
+</html>
