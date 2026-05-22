@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join Our Exclusive Community</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    // Initialize your specific Pixel ID
+    fbq('init', '1240441841605998');
+    fbq('track', 'PageView'); // Tracks standard page visits
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1240441841605998&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
     <style>
         /* Premium Glassmorphism Effect */
         .glass-card {
@@ -150,7 +171,7 @@
 
             // SECURITY CHECK 2: Time-on-page (Bots page load hote hi fast click karte hain)
             const timeElapsed = Date.now() - pageLoadTime;
-            if (timeElapsed < 1500) { // Agar 1.5 seconds se pehle click kiya toh pakka bot hai
+            if (timeElapsed < 1000) { // Updated to 1 second so fast real mobile users aren't blocked
                 console.warn("Blocked: Clicked too fast. Likely a bot.");
                 return false;
             }
@@ -184,6 +205,17 @@
             if (!hasJoinedBefore) {
                 console.log("New User Clicked! Tracking Conversion...");
                 setStorageItem('b2express_clicked', 'true');
+                
+                // --- META PIXEL CONVERSION TRACKING FIRED HERE ---
+                // Tracking this successfully authenticated human click as a "Subscribe"
+                try {
+                    if (typeof fbq === 'function') {
+                        fbq('track', 'Subscribe'); 
+                        console.log("Meta Pixel Subscribe event fired!");
+                    }
+                } catch(error) {
+                    console.log("Pixel tracking blocked by user's browser or adblocker.");
+                }
             } else {
                 console.log("Returning User. Not counting as a new conversion.");
             }
