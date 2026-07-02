@@ -3,50 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B2 EXPRESS - Aviator Signals</title>
-    <!-- Tailwind CSS import -->
+    <title>B2 EXPRESS - Join Telegram</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts import -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
     
-    <!-- Custom styling for extra effects -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#050505',
+                        cardBg: '#111111',
+                        cardBorder: '#222222',
+                        brandYellow: '#e5ff00',
+                        textMuted: '#9ca3af',
+                    },
+                    boxShadow: {
+                        'glow-yellow': '0 0 30px rgba(229, 255, 0, 0.3)',
+                        'logo-glow': '0 0 25px rgba(229, 255, 0, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #0b0514;
-            background-image: radial-gradient(circle at 50% 0%, #2a164d 0%, #0b0514 60%);
+            background-color: #050505;
             color: white;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        /* Glowing border animation for profile */
-        .profile-glow {
-            background: linear-gradient(45deg, #ff5e00, #ff00b3, #7b00ff, #ff5e00);
-            background-size: 400% 400%;
-            animation: gradientBorder 5s ease infinite;
+        /* Custom Background Glows - Fixed with viewport bounds */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(229,255,0,0.15) 0%, rgba(5,5,5,0) 70%);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            border-radius: 50%;
+            pointer-events: none;
         }
-
-        @keyframes gradientBorder {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .bg-glow-purple {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(5,5,5,0) 70%);
+            bottom: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            border-radius: 50%;
+            pointer-events: none;
         }
-
-        /* Pulse animation for CTA button */
-        .btn-glow {
-            box-shadow: 0 0 25px rgba(255, 94, 0, 0.4);
-            transition: all 0.3s ease;
+        /* Image Logo Style */
+        .logo-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid #e5ff00;
+            object-fit: cover;
+            background: #000;
+            box-shadow: 0 0 30px rgba(229, 255, 0, 0.45);
+            transition: transform 0.3s ease;
         }
-        .btn-glow:hover {
-            box-shadow: 0 0 40px rgba(255, 94, 0, 0.7);
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        /* Stats card styling */
-        .glass-card {
-            background: rgba(30, 20, 50, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .logo-image:hover {
+            transform: scale(1.05);
         }
     </style>
 
@@ -60,139 +88,114 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '896803403471766');
+    fbq('init', '938432942601050');
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=896803403471766&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id=938432942601050&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+
 </head>
-<body class="flex flex-col items-center justify-center py-10 px-4">
+<body class="antialiased min-h-screen bg-darkBg relative font-sans">
+    
+    <!-- Wrapper to strictly clip extra bottom spaces caused by gradients -->
+    <div class="relative min-h-screen overflow-hidden w-full flex flex-col items-center justify-center py-10">
+        
+        <!-- Ambient Background Glows inside container -->
+        <div class="bg-glow"></div>
+        <div class="bg-glow-purple"></div>
 
-    <!-- Main Container -->
-    <div class="max-w-[450px] w-full flex flex-col items-center">
-
-        <!-- Profile Picture Section -->
-        <div class="relative mb-6">
-            <div class="profile-glow p-1 rounded-full w-32 h-32 flex items-center justify-center">
-                <!-- Text Logo (B2) -->
-                <div class="w-full h-full bg-[#0b0514] rounded-full flex items-center justify-center">
-                    <span class="text-5xl font-black bg-gradient-to-r from-[#ff6a00] to-[#ee0979] text-transparent bg-clip-text tracking-wider">
-                        B2
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Titles Section -->
-        <h1 class="text-4xl font-black tracking-widest text-white mb-1 uppercase text-center">B2 EXPRESS</h1>
-        <h2 class="text-2xl font-bold text-[#ff5e00] tracking-widest mb-3 text-center drop-shadow-md">AVIATOR EXPERT</h2>
-        <p class="text-[10px] sm:text-xs text-[#a78bfa] tracking-[0.25em] mb-8 font-semibold uppercase text-center">Premium Aviator Signals</p>
-
-        <!-- CTA Button (Subscribe) -->
-        <!-- Removed onclick Subscribe event tracking -->
-        <a href="https://t.me/+0pvspZRRCDk3Mjk1" class="w-full bg-gradient-to-r from-[#ff6a00] to-[#ee0979] text-white font-bold text-lg py-4 rounded-xl text-center btn-glow mb-4">
-            SUBSCRIBE NOW
-        </a>
-
-        <!-- Subtext -->
-        <p class="text-xs text-gray-400 mb-8 font-medium">100K+ members getting verified Aviator signals</p>
-
-        <!-- Countdown Timer -->
-        <div class="glass-card rounded-full px-6 py-2 flex items-center gap-2 mb-10 border border-[#4a2b75]">
-            <span class="text-xs text-gray-300 font-semibold tracking-wider">OFFER ENDS IN:</span>
-            <span id="timer" class="text-[#ff5e00] font-bold text-sm tracking-wider">05:00</span>
-        </div>
-
-        <!-- Stats Grid (3 Columns) -->
-        <div class="grid grid-cols-3 gap-3 w-full mb-10">
+        <div class="max-w-4xl w-full mx-auto px-4 flex flex-col items-center relative z-10">
             
-            <!-- Box 1 -->
-            <div class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition hover:bg-[#2a1a4a]">
-                <!-- Airplane Icon (Aviator Theme) -->
-                <svg class="w-6 h-6 text-[#ff5e00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                </svg>
-                <div class="text-center">
-                    <h3 class="text-lg font-bold text-white leading-tight">99%</h3>
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Accuracy</p>
+            <!-- Logo Section with Premium Golden 'B' Logo -->
+            <div class="mb-6 flex justify-center">
+                <img src="watermarked_img_1819214572267359626.png" alt="B2 EXPRESS Logo" class="logo-image" onerror="this.src='https://placehold.co/140x140/000000/e5ff00?text=B2+EXPRESS'">
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="text-4xl md:text-5xl font-extrabold text-center tracking-tight mb-1">
+                B2 <br class="md:hidden">
+                <span class="text-brandYellow">EXPRESS</span>
+            </h1>
+            <p class="text-textMuted text-xs md:text-sm tracking-[0.3em] uppercase font-semibold mb-8 text-center">
+                India's No.1 Matka App
+            </p>
+
+            <!-- 🔴 TELEGRAM JOIN BUTTON 🔴 -->
+            <a href="https://t.me/+tRFJkVgCSMs5NWNl" target="_blank" class="w-full max-w-md bg-gradient-to-r from-[#f0ff44] to-[#ccff00] text-black font-extrabold py-4 px-8 rounded-xl text-lg hover:scale-105 transition-transform duration-300 shadow-glow-yellow mb-4 uppercase tracking-wide text-center flex justify-center items-center gap-3">
+                <i class="fa-brands fa-telegram text-xl"></i> JOIN TELEGRAM
+            </a>
+            
+            <p class="text-gray-400 text-sm mb-6 text-center">Trusted by 100K+ Active Users</p>
+
+            <!-- Countdown Timer -->
+            <div class="bg-black/50 border border-white/5 rounded-full px-6 py-2 mb-10 flex items-center gap-2 backdrop-blur-sm">
+                <span class="text-gray-400 text-sm font-semibold tracking-wider">ENDS IN:</span>
+                <span class="text-red-500 font-bold text-sm tracking-widest" id="countdown">14:59</span>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-3 md:gap-6 w-full max-w-2xl mb-8">
+                <!-- Card 1 -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
+                    <i class="fa-solid fa-check text-brandYellow text-xl md:text-2xl mb-2"></i>
+                    <h3 class="text-white font-bold text-lg md:text-xl">100%</h3>
+                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Accuracy</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
+                    <i class="fa-regular fa-star text-brandYellow text-xl md:text-2xl mb-2"></i>
+                    <h3 class="text-white font-bold text-lg md:text-xl">100K+</h3>
+                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Members</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
+                    <i class="fa-solid fa-gem text-brandYellow text-xl md:text-2xl mb-2"></i>
+                    <h3 class="text-white font-bold text-lg md:text-xl">24/7</h3>
+                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Support</p>
                 </div>
             </div>
 
-            <!-- Box 2 -->
-            <div class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition hover:bg-[#2a1a4a]">
-                <!-- Users Icon -->
-                <svg class="w-6 h-6 text-[#ff5e00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                </svg>
-                <div class="text-center">
-                    <h3 class="text-lg font-bold text-white leading-tight">100K+</h3>
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Members</p>
-                </div>
-            </div>
-
-            <!-- Box 3 -->
-            <div class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition hover:bg-[#2a1a4a]">
-                <!-- Support/Lightning Icon -->
-                <svg class="w-6 h-6 text-[#ff5e00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                <div class="text-center">
-                    <h3 class="text-lg font-bold text-white leading-tight">24/7</h3>
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Signals</p>
-                </div>
+            <!-- Trust Badges -->
+            <div class="flex items-center justify-center gap-4 md:gap-8 text-sm text-gray-400">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brandYellow"></i> Verified</div>
+                <span class="text-gray-700">•</span>
+                <div>Secure</div>
+                <span class="text-gray-700">•</span>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-bolt text-brandYellow"></i> Instant</div>
             </div>
 
         </div>
-
-        <!-- Trust Badges Footer -->
-        <div class="flex items-center justify-center gap-4 text-xs font-semibold text-gray-400">
-            <div class="flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                Verified
-            </div>
-            <span>•</span>
-            <div class="flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                Secure
-            </div>
-            <span>•</span>
-            <div class="flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                Instant
-            </div>
-        </div>
-
     </div>
 
-    <!-- Countdown Timer Script -->
+    <!-- Countdown Script -->
     <script>
-        // 5 minute timer script
-        let timeInSecs = 5 * 60; // 5 minutes
-        const timerElement = document.getElementById('timer');
+        // Set an initial time of 15 minutes
+        let timeInSeconds = 15 * 60; 
+        const countdownEl = document.getElementById('countdown');
 
-        function updateTimer() {
-            let minutes = Math.floor(timeInSecs / 60);
-            let seconds = timeInSecs % 60;
+        function updateCountdown() {
+            const minutes = Math.floor(timeInSeconds / 60);
+            let seconds = timeInSeconds % 60;
 
-            // Zero padding if less than 10
-            minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
+            let displayMinutes = minutes < 10 ? '0' + minutes : minutes;
 
-            timerElement.textContent = `${minutes}:${seconds}`;
+            if(countdownEl) {
+                countdownEl.innerHTML = `${displayMinutes}:${seconds}`;
+            }
 
-            if (timeInSecs > 0) {
-                timeInSecs--;
+            if (timeInSeconds > 0) {
+                timeInSeconds--;
             } else {
-                // Agar timer khatam ho jaye toh phir se 5 min pe reset kardo (FOMO create karne ke liye)
-                timeInSecs = 5 * 60;
+                // Reset or keep at 00:00
+                timeInSeconds = 0; 
             }
         }
 
-        // Har ek second me timer update karein
-        setInterval(updateTimer, 1000);
-        updateTimer();
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
     </script>
 </body>
 </html>
