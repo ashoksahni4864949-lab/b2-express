@@ -10,9 +10,36 @@ export default async function handler(req, res) {
       });
     }
 
-    const webhookUrl = "https://b2-express.vercel.app/api/telegram";
+    if (!secret) {
+      return res.status(500).json({
+        ok: false,
+        error: "TELEGRAM_WEBHOOK_SECRET is missing"
+      });
+    }
 
-    const response = await fetch(
+    const webhookUrl =
+      "https://b2-express.vercel.app/api/telegram";
+
+    // =========================
+    // STEP 1: REMOVE OLD WEBHOOK
+    // =========================
+
+    const deleteResponse = await fetch(
+      `https://api.telegram.org/bot${token}/deleteWebhook`,
+      {
+        method: "POST"
+      }
+    );
+
+    const deleteResult = await deleteResponse.json();
+
+    console.log("Delete webhook:", deleteResult);
+
+    // =========================
+    // STEP 2: SET NEW WEBHOOK
+    // =========================
+
+    const setResponse = await fetch(
       `https://api.telegram.org/bot${token}/setWebhook`,
       {
         method: "POST",
@@ -27,15 +54,20 @@ export default async function handler(req, res) {
       }
     );
 
-    const result = await response.json();
+    const setResult = await setResponse.json();
+
+    console.log("Set webhook:", setResult);
 
     return res.status(200).json({
-      ok: result.ok,
+      ok: setResult.ok,
       webhookUrl: webhookUrl,
-      telegram: result
+      deleteWebhook: deleteResult,
+      telegram: setResult
     });
 
   } catch (error) {
+    console.error(error);
+
     return res.status(500).json({
       ok: false,
       error: error.message
