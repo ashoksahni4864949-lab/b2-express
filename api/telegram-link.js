@@ -34,7 +34,7 @@ export default async function handler(req, res) {
     const trackingId =
       `${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
 
-    const channelId = "-1003778248565";
+    const channelId = "-1002171303242";
 
     // Create a unique Telegram invite link
     // Join request enabled.
