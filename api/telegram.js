@@ -1,33 +1,42 @@
 export default async function handler(req, res) {
   console.log("=== TELEGRAM WEBHOOK HIT ===");
-  console.log("Method:", req.method);
-  console.log("Body:", JSON.stringify(req.body));
+  console.log(JSON.stringify(req.body));
 
   if (req.method !== "POST") {
     return res.status(200).json({
       ok: true,
-      message: "Telegram webhook is working"
+      message: "Webhook is working"
     });
   }
 
   const update = req.body;
 
-  if (update?.chat_member) {
-    const member = update.chat_member;
+  // Private channel JOIN REQUEST
+  if (update.chat_join_request) {
+    const request = update.chat_join_request;
+    const user = request.from;
 
-    console.log("=== CHAT MEMBER UPDATE ===");
-    console.log("Chat:", update.chat?.title);
-    console.log("Old status:", member.old_chat_member?.status);
-    console.log("New status:", member.new_chat_member?.status);
-    console.log("User ID:", member.new_chat_member?.user?.id);
-    console.log("Username:", member.new_chat_member?.user?.username);
+    console.log("=== JOIN REQUEST RECEIVED ===");
 
-    if (
-      member.new_chat_member?.status === "member" &&
-      member.old_chat_member?.status !== "member"
-    ) {
-      console.log("=== CHANNEL JOIN DETECTED ===");
-    }
+    console.log("Channel:", request.chat?.title);
+    console.log("Channel ID:", request.chat?.id);
+
+    console.log("User ID:", user?.id);
+    console.log("Username:", user?.username || null);
+    console.log("First Name:", user?.first_name || null);
+    console.log("Last Name:", user?.last_name || null);
+
+    console.log("Invite Link:", request.invite_link?.invite_link || null);
+    console.log("Request Date:", request.date);
+
+    // IMPORTANT:
+    // Abhi request ko approve nahi kar rahe.
+    // User ki request pending rahegi.
+
+    // Baad me yahan:
+    // Meta Conversions API
+    // + attribution/tracking
+    // add karenge.
   }
 
   return res.status(200).json({
