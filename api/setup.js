@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           url: webhookUrl,
           secret_token: secret,
-          allowed_updates: ["chat_member"]
+          allowed_updates: ["chat_join_request"]
         })
       }
     );
