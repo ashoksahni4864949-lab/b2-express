@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>B2 EXPRESS - Join Telegram</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
-    
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&display=swap"
+        rel="stylesheet"
+    >
+
     <script>
         tailwind.config = {
             theme: {
@@ -15,6 +25,7 @@
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
                     },
+
                     colors: {
                         darkBg: '#050505',
                         cardBg: '#111111',
@@ -22,9 +33,13 @@
                         brandYellow: '#e5ff00',
                         textMuted: '#9ca3af',
                     },
+
                     boxShadow: {
-                        'glow-yellow': '0 0 30px rgba(229, 255, 0, 0.3)',
-                        'logo-glow': '0 0 25px rgba(229, 255, 0, 0.4)',
+                        'glow-yellow':
+                            '0 0 30px rgba(229, 255, 0, 0.3)',
+
+                        'logo-glow':
+                            '0 0 25px rgba(229, 255, 0, 0.4)',
                     }
                 }
             }
@@ -37,12 +52,17 @@
             color: white;
             overflow-x: hidden;
         }
-        /* Custom Background Glows - Fixed with viewport bounds */
+
         .bg-glow {
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(229,255,0,0.15) 0%, rgba(5,5,5,0) 70%);
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(229,255,0,0.15) 0%,
+                    rgba(5,5,5,0) 70%
+                );
             top: -200px;
             left: 50%;
             transform: translateX(-50%);
@@ -50,11 +70,17 @@
             border-radius: 50%;
             pointer-events: none;
         }
+
         .bg-glow-purple {
             position: absolute;
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(5,5,5,0) 70%);
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(255,255,255,0.05) 0%,
+                    rgba(5,5,5,0) 70%
+                );
             bottom: -300px;
             left: 50%;
             transform: translateX(-50%);
@@ -62,7 +88,7 @@
             border-radius: 50%;
             pointer-events: none;
         }
-        /* Image Logo Style */
+
         .logo-image {
             width: 140px;
             height: 140px;
@@ -70,132 +96,651 @@
             border: 3px solid #e5ff00;
             object-fit: cover;
             background: #000;
-            box-shadow: 0 0 30px rgba(229, 255, 0, 0.45);
+            box-shadow:
+                0 0 30px rgba(229, 255, 0, 0.45);
             transition: transform 0.3s ease;
         }
+
         .logo-image:hover {
             transform: scale(1.05);
         }
+
+        #telegramJoinBtn:disabled {
+            opacity: 0.7;
+            cursor: wait;
+            transform: none !important;
+        }
     </style>
 
-    <!-- Meta Pixel Code -->
+
+    <!-- ========================= -->
+    <!-- META PIXEL -->
+    <!-- ========================= -->
+
     <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '938432942601050');
-    fbq('track', 'PageView');
+        !function(f,b,e,v,n,t,s)
+        {
+            if(f.fbq)return;
+
+            n=f.fbq=function(){
+                n.callMethod ?
+                n.callMethod.apply(n,arguments) :
+                n.queue.push(arguments)
+            };
+
+            if(!f._fbq)f._fbq=n;
+
+            n.push=n;
+            n.loaded=!0;
+            n.version='2.0';
+            n.queue=[];
+
+            t=b.createElement(e);
+            t.async=!0;
+            t.src=v;
+
+            s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)
+
+        }(
+            window,
+            document,
+            'script',
+            'https://connect.facebook.net/en_US/fbevents.js'
+        );
+
+        /*
+         * Correct Meta Pixel ID
+         */
+        fbq('init', '924764623699511');
+
+        /*
+         * Normal PageView
+         */
+        fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=938432942601050&ev=PageView&noscript=1"
-    /></noscript>
+
+
+    <noscript>
+        <img
+            height="1"
+            width="1"
+            style="display:none"
+            src="https://www.facebook.com/tr?id=924764623699511&ev=PageView&noscript=1"
+        />
+    </noscript>
+
     <!-- End Meta Pixel Code -->
 
 </head>
+
+
 <body class="antialiased min-h-screen bg-darkBg relative font-sans">
-    
-    <!-- Wrapper to strictly clip extra bottom spaces caused by gradients -->
-    <div class="relative min-h-screen overflow-hidden w-full flex flex-col items-center justify-center py-10">
-        
-        <!-- Ambient Background Glows inside container -->
+
+    <!-- ========================= -->
+    <!-- MAIN WRAPPER -->
+    <!-- ========================= -->
+
+    <div
+        class="relative min-h-screen overflow-hidden w-full flex flex-col items-center justify-center py-10"
+    >
+
+        <!-- Background Glows -->
+
         <div class="bg-glow"></div>
+
         <div class="bg-glow-purple"></div>
 
-        <div class="max-w-4xl w-full mx-auto px-4 flex flex-col items-center relative z-10">
-            
-            <!-- Logo Section with Premium Golden 'B' Logo -->
+
+        <!-- ========================= -->
+        <!-- CONTENT -->
+        <!-- ========================= -->
+
+        <div
+            class="max-w-4xl w-full mx-auto px-4 flex flex-col items-center relative z-10"
+        >
+
+
+            <!-- LOGO -->
+
             <div class="mb-6 flex justify-center">
-                <img src="watermarked_img_1819214572267359626.png" alt="B2 EXPRESS Logo" class="logo-image" onerror="this.src='https://placehold.co/140x140/000000/e5ff00?text=B2+EXPRESS'">
+
+                <img
+                    src="watermarked_img_1819214572267359626.png"
+                    alt="B2 EXPRESS Logo"
+                    class="logo-image"
+                    onerror="this.src='https://placehold.co/140x140/000000/e5ff00?text=B2+EXPRESS'"
+                >
+
             </div>
 
-            <!-- Main Heading -->
-            <h1 class="text-4xl md:text-5xl font-extrabold text-center tracking-tight mb-1">
-                B2 <br class="md:hidden">
-                <span class="text-brandYellow">EXPRESS</span>
+
+            <!-- HEADING -->
+
+            <h1
+                class="text-4xl md:text-5xl font-extrabold text-center tracking-tight mb-1"
+            >
+
+                B2
+                <br class="md:hidden">
+
+                <span class="text-brandYellow">
+                    EXPRESS
+                </span>
+
             </h1>
-            <p class="text-textMuted text-xs md:text-sm tracking-[0.3em] uppercase font-semibold mb-8 text-center">
+
+
+            <p
+                class="text-textMuted text-xs md:text-sm tracking-[0.3em] uppercase font-semibold mb-8 text-center"
+            >
                 India's No.1 AVIATOR
             </p>
 
-            <!-- 🔴 TELEGRAM JOIN BUTTON (Changed here: Removed target="_blank") 🔴 -->
-            <a href="https://t.me/+kQkYWP_xW4k4MzU9" class="w-full max-w-md bg-gradient-to-r from-[#f0ff44] to-[#ccff00] text-black font-extrabold py-4 px-8 rounded-xl text-lg hover:scale-105 transition-transform duration-300 shadow-glow-yellow mb-4 uppercase tracking-wide text-center flex justify-center items-center gap-3">
-                <i class="fa-brands fa-telegram text-xl"></i> JOIN TELEGRAM
-            </a>
-            
-            <p class="text-gray-400 text-sm mb-6 text-center">Trusted by 100K+ Active Users</p>
 
-            <!-- Countdown Timer -->
-            <div class="bg-black/50 border border-white/5 rounded-full px-6 py-2 mb-10 flex items-center gap-2 backdrop-blur-sm">
-                <span class="text-gray-400 text-sm font-semibold tracking-wider">ENDS IN:</span>
-                <span class="text-red-500 font-bold text-sm tracking-widest" id="countdown">14:59</span>
+            <!-- ========================= -->
+            <!-- TELEGRAM BUTTON -->
+            <!-- ========================= -->
+
+            <button
+                id="telegramJoinBtn"
+                type="button"
+                class="w-full max-w-md bg-gradient-to-r from-[#f0ff44] to-[#ccff00] text-black font-extrabold py-4 px-8 rounded-xl text-lg hover:scale-105 transition-transform duration-300 shadow-glow-yellow mb-4 uppercase tracking-wide text-center flex justify-center items-center gap-3"
+            >
+
+                <i class="fa-brands fa-telegram text-xl"></i>
+
+                JOIN TELEGRAM
+
+            </button>
+
+
+            <p class="text-gray-400 text-sm mb-6 text-center">
+                Trusted by 100K+ Active Users
+            </p>
+
+
+            <!-- ========================= -->
+            <!-- COUNTDOWN -->
+            <!-- ========================= -->
+
+            <div
+                class="bg-black/50 border border-white/5 rounded-full px-6 py-2 mb-10 flex items-center gap-2 backdrop-blur-sm"
+            >
+
+                <span
+                    class="text-gray-400 text-sm font-semibold tracking-wider"
+                >
+                    ENDS IN:
+                </span>
+
+                <span
+                    class="text-red-500 font-bold text-sm tracking-widest"
+                    id="countdown"
+                >
+                    14:59
+                </span>
+
             </div>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-3 gap-3 md:gap-6 w-full max-w-2xl mb-8">
-                <!-- Card 1 -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
-                    <i class="fa-solid fa-check text-brandYellow text-xl md:text-2xl mb-2"></i>
-                    <h3 class="text-white font-bold text-lg md:text-xl">100%</h3>
-                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Accuracy</p>
+
+            <!-- ========================= -->
+            <!-- STATS -->
+            <!-- ========================= -->
+
+            <div
+                class="grid grid-cols-3 gap-3 md:gap-6 w-full max-w-2xl mb-8"
+            >
+
+                <!-- CARD 1 -->
+
+                <div
+                    class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50"
+                >
+
+                    <i
+                        class="fa-solid fa-check text-brandYellow text-xl md:text-2xl mb-2"
+                    ></i>
+
+                    <h3 class="text-white font-bold text-lg md:text-xl">
+                        100%
+                    </h3>
+
+                    <p
+                        class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider"
+                    >
+                        Accuracy
+                    </p>
+
                 </div>
-                <!-- Card 2 -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
-                    <i class="fa-regular fa-star text-brandYellow text-xl md:text-2xl mb-2"></i>
-                    <h3 class="text-white font-bold text-lg md:text-xl">100K+</h3>
-                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Members</p>
+
+
+                <!-- CARD 2 -->
+
+                <div
+                    class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50"
+                >
+
+                    <i
+                        class="fa-regular fa-star text-brandYellow text-xl md:text-2xl mb-2"
+                    ></i>
+
+                    <h3 class="text-white font-bold text-lg md:text-xl">
+                        100K+
+                    </h3>
+
+                    <p
+                        class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider"
+                    >
+                        Members
+                    </p>
+
                 </div>
-                <!-- Card 3 -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
-                    <i class="fa-solid fa-gem text-brandYellow text-xl md:text-2xl mb-2"></i>
-                    <h3 class="text-white font-bold text-lg md:text-xl">24/7</h3>
-                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Support</p>
+
+
+                <!-- CARD 3 -->
+
+                <div
+                    class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50"
+                >
+
+                    <i
+                        class="fa-solid fa-gem text-brandYellow text-xl md:text-2xl mb-2"
+                    ></i>
+
+                    <h3 class="text-white font-bold text-lg md:text-xl">
+                        24/7
+                    </h3>
+
+                    <p
+                        class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider"
+                    >
+                        Support
+                    </p>
+
                 </div>
+
             </div>
 
-            <!-- Trust Badges -->
-            <div class="flex items-center justify-center gap-4 md:gap-8 text-sm text-gray-400">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brandYellow"></i> Verified</div>
-                <span class="text-gray-700">•</span>
-                <div>Secure</div>
-                <span class="text-gray-700">•</span>
-                <div class="flex items-center gap-2"><i class="fa-solid fa-bolt text-brandYellow"></i> Instant</div>
+
+            <!-- ========================= -->
+            <!-- TRUST BADGES -->
+            <!-- ========================= -->
+
+            <div
+                class="flex items-center justify-center gap-4 md:gap-8 text-sm text-gray-400"
+            >
+
+                <div class="flex items-center gap-2">
+
+                    <i
+                        class="fa-solid fa-circle-check text-brandYellow"
+                    ></i>
+
+                    Verified
+
+                </div>
+
+                <span class="text-gray-700">
+                    •
+                </span>
+
+                <div>
+                    Secure
+                </div>
+
+                <span class="text-gray-700">
+                    •
+                </span>
+
+                <div class="flex items-center gap-2">
+
+                    <i
+                        class="fa-solid fa-bolt text-brandYellow"
+                    ></i>
+
+                    Instant
+
+                </div>
+
             </div>
 
         </div>
+
     </div>
 
-    <!-- Countdown Script -->
+
+    <!-- ========================= -->
+    <!-- COUNTDOWN SCRIPT -->
+    <!-- ========================= -->
+
     <script>
-        // Set an initial time of 15 minutes
-        let timeInSeconds = 15 * 60; 
-        const countdownEl = document.getElementById('countdown');
+
+        let timeInSeconds = 15 * 60;
+
+        const countdownEl =
+            document.getElementById('countdown');
+
 
         function updateCountdown() {
-            const minutes = Math.floor(timeInSeconds / 60);
-            let seconds = timeInSeconds % 60;
 
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            let displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+            const minutes =
+                Math.floor(timeInSeconds / 60);
 
-            if(countdownEl) {
-                countdownEl.innerHTML = `${displayMinutes}:${seconds}`;
+            let seconds =
+                timeInSeconds % 60;
+
+
+            seconds =
+                seconds < 10
+                    ? '0' + seconds
+                    : seconds;
+
+
+            let displayMinutes =
+                minutes < 10
+                    ? '0' + minutes
+                    : minutes;
+
+
+            if (countdownEl) {
+
+                countdownEl.innerHTML =
+                    `${displayMinutes}:${seconds}`;
+
             }
+
 
             if (timeInSeconds > 0) {
+
                 timeInSeconds--;
+
             } else {
-                // Reset or keep at 00:00
-                timeInSeconds = 0; 
+
+                timeInSeconds = 0;
+
             }
+
         }
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
+
+        setInterval(
+            updateCountdown,
+            1000
+        );
+
+        updateCountdown();
+
     </script>
+
+
+    <!-- ========================= -->
+    <!-- META + TELEGRAM TRACKING -->
+    <!-- ========================= -->
+
+    <script>
+
+        /*
+         * Get browser cookie
+         */
+
+        function getCookie(name) {
+
+            const match =
+                document.cookie.match(
+                    new RegExp(
+                        '(^| )' +
+                        name +
+                        '=([^;]+)'
+                    )
+                );
+
+            return match
+                ? decodeURIComponent(match[2])
+                : null;
+        }
+
+
+        /*
+         * Get fbclid from URL
+         */
+
+        function getFBCLID() {
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            return params.get('fbclid');
+        }
+
+
+        /*
+         * Get _fbc
+         *
+         * If Meta already created _fbc,
+         * use it.
+         *
+         * Otherwise create it from fbclid.
+         */
+
+        function getFBC() {
+
+            const existingFbc =
+                getCookie('_fbc');
+
+            if (existingFbc) {
+
+                return existingFbc;
+
+            }
+
+
+            const fbclid =
+                getFBCLID();
+
+            if (!fbclid) {
+
+                return null;
+
+            }
+
+
+            return (
+                'fb.1.' +
+                Date.now() +
+                '.' +
+                fbclid
+            );
+
+        }
+
+
+        /*
+         * Telegram button
+         */
+
+        const telegramButton =
+            document.getElementById(
+                'telegramJoinBtn'
+            );
+
+
+        if (telegramButton) {
+
+            telegramButton.addEventListener(
+                'click',
+                async function () {
+
+                    const button = this;
+
+
+                    /*
+                     * Prevent double clicks
+                     */
+
+                    button.disabled = true;
+
+
+                    button.innerHTML = `
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        CONNECTING...
+                    `;
+
+
+                    try {
+
+                        /*
+                         * Meta attribution data
+                         */
+
+                        const fbclid =
+                            getFBCLID();
+
+                        const fbp =
+                            getCookie('_fbp');
+
+                        const fbc =
+                            getFBC();
+
+
+                        console.log(
+                            'Meta tracking data:',
+                            {
+                                fbclid: fbclid,
+                                fbc: fbc,
+                                fbp: fbp
+                            }
+                        );
+
+
+                        /*
+                         * Ask Vercel to create
+                         * unique Telegram invite
+                         */
+
+                        const response =
+                            await fetch(
+                                '/api/telegram-link',
+                                {
+                                    method: 'POST',
+
+                                    headers: {
+                                        'Content-Type':
+                                            'application/json'
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+
+                                            fbclid:
+                                                fbclid,
+
+                                            fbc:
+                                                fbc,
+
+                                            fbp:
+                                                fbp
+
+                                        })
+                                }
+                            );
+
+
+                        const result =
+                            await response.json();
+
+
+                        console.log(
+                            'Telegram API response:',
+                            result
+                        );
+
+
+                        /*
+                         * Check response
+                         */
+
+                        if (
+                            !response.ok ||
+                            !result.ok ||
+                            !result.inviteLink
+                        ) {
+
+                            throw new Error(
+                                result.error ||
+                                'Telegram link creation failed'
+                            );
+
+                        }
+
+
+                        /*
+                         * Optional browser event
+                         *
+                         * IMPORTANT:
+                         * This is NOT Subscribe.
+                         * It only records the button click.
+                         */
+
+                        if (
+                            typeof fbq === 'function'
+                        ) {
+
+                            fbq(
+                                'trackCustom',
+                                'TelegramClick'
+                            );
+
+                        }
+
+
+                        /*
+                         * Redirect user to
+                         * unique Telegram invite
+                         */
+
+                        window.location.href =
+                            result.inviteLink;
+
+                    }
+
+
+                    catch (error) {
+
+                        console.error(
+                            'Telegram tracking error:',
+                            error
+                        );
+
+
+                        /*
+                         * Restore button
+                         */
+
+                        button.disabled =
+                            false;
+
+
+                        button.innerHTML = `
+                            <i class="fa-brands fa-telegram text-xl"></i>
+                            JOIN TELEGRAM
+                        `;
+
+
+                        alert(
+                            'Please try again.'
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+    </script>
+
 </body>
 </html>
