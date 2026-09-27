@@ -1,52 +1,36 @@
 export default async function handler(req, res) {
+  console.log("=== TELEGRAM WEBHOOK HIT ===");
+  console.log("Method:", req.method);
+  console.log("Body:", JSON.stringify(req.body));
+
   if (req.method !== "POST") {
     return res.status(200).json({
       ok: true,
-      message: "Telegram webhook is active"
+      message: "Telegram webhook is working"
     });
   }
 
-  try {
-    const update = req.body;
+  const update = req.body;
 
-    console.log("Telegram update:", JSON.stringify(update));
+  if (update?.chat_member) {
+    const member = update.chat_member;
 
-    // Channel member update
-    if (update.chat_member) {
-      const member = update.chat_member;
+    console.log("=== CHAT MEMBER UPDATE ===");
+    console.log("Chat:", update.chat?.title);
+    console.log("Old status:", member.old_chat_member?.status);
+    console.log("New status:", member.new_chat_member?.status);
+    console.log("User ID:", member.new_chat_member?.user?.id);
+    console.log("Username:", member.new_chat_member?.user?.username);
 
-      const oldStatus = member.old_chat_member?.status;
-      const newStatus = member.new_chat_member?.status;
-
-      console.log("Old status:", oldStatus);
-      console.log("New status:", newStatus);
-
-      // User joined the channel
-      if (
-        newStatus === "member" &&
-        oldStatus !== "member"
-      ) {
-        const user = member.new_chat_member.user;
-
-        console.log("CHANNEL JOIN:", {
-          user_id: user.id,
-          username: user.username || null,
-          first_name: user.first_name || null,
-          channel_id: update.chat?.id
-        });
-
-        // YAHAN BAAD ME META CAPI EVENT ADD KARENGE
-      }
+    if (
+      member.new_chat_member?.status === "member" &&
+      member.old_chat_member?.status !== "member"
+    ) {
+      console.log("=== CHANNEL JOIN DETECTED ===");
     }
-
-    return res.status(200).json({ ok: true });
-
-  } catch (error) {
-    console.error("Webhook error:", error);
-
-    return res.status(500).json({
-      ok: false,
-      error: "Webhook error"
-    });
   }
+
+  return res.status(200).json({
+    ok: true
+  });
 }
