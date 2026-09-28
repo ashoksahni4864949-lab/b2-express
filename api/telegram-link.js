@@ -1,50 +1,125 @@
+import crypto from "crypto";
+
 export default async function handler(req, res) {
-  console.log("=== TELEGRAM WEBHOOK HIT ===");
+  console.log("=== TELEGRAM LINK API HIT ===");
+
+  // =========================
+  // ONLY POST
+  // =========================
 
   if (req.method !== "POST") {
-    return res.status(200).json({
-      ok: true,
-      message: "Webhook is working"
+    return res.status(405).json({
+      ok: false,
+      error: "Method not allowed"
     });
   }
 
   try {
     // =========================
-    // TELEGRAM SECRET
-    // =========================
-
-    const expectedSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
-    const receivedSecret = req.headers["x-telegram-bot-api-secret-token"];
-
-    if (expectedSecret && receivedSecret !== expectedSecret) {
-      console.log("❌ Invalid Telegram webhook secret");
-      return res.status(401).json({
-        ok: false,
-        error: "Unauthorized"
-      });
-    }
-
-    const update = req.body;
-    console.log("Telegram update received");
-
-    // =========================
     // ENVIRONMENT VARIABLES
     // =========================
 
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const channelId = process.env.TELEGRAM_CHANNEL_ID;
+
     const redisUrl = process.env.KV_REST_API_URL;
     const redisToken = process.env.KV_REST_API_TOKEN;
-    const metaPixelId = process.env.META_PIXEL_ID;
-    const metaAccessToken = process.env.META_CAPI_ACCESS_TOKEN;
+
+    if (!botToken) {
+      console.error("❌ TELEGRAM_BOT_TOKEN missing");
+
+      return res.status(500).json({
+        ok: false,
+        error: "Telegram bot configuration missing"
+      });
+    }
+
+    if (!channelId) {
+      console.error("❌ TELEGRAM_CHANNEL_ID missing");
+
+      return res.status(500).json({
+        ok: false,
+        error: "Telegram channel configuration missing"
+      });
+    }
 
     if (!redisUrl || !redisToken) {
-      console.error("❌ Redis environment variables missing");
-      return res.status(500).json({ ok: false, error: "Redis configuration missing" });
+      console.error("❌ Redis configuration missing");
+
+      return res.status(500).json({
+        ok: false,
+        error: "Redis configuration missing"
+      });
     }
 
-    if (!metaPixelId || !metaAccessToken) {
-      console.error("❌ Meta CAPI environment variables missing");
-      return res.status(500).json({ ok: false, error: "Meta CAPI configuration missing" });
+    // =========================
+    // REQUEST DATA
+    // =========================
+
+    const body = req.body || {};
+
+    const fbclid =
+      typeof body.fbclid === "string"
+        ? body.fbclid.trim()
+        : "";
+
+    const fbc =
+      typeof body.fbc === "string"
+        ? body.fbc.trim()
+        : "";
+
+    const fbp =
+      typeof body.fbp === "string"
+        ? body.fbp.trim()
+        : "";
+
+    // =========================
+    // VISITOR IP
+    // =========================
+
+    let clientIp =
+      req.headers["x-forwarded-for"] ||
+      req.headers["x-real-ip"] ||
+      req.socket?.remoteAddress ||
+      "";
+
+    if (Array.isArray(clientIp)) {
+      clientIp = clientIp[0];
     }
+
+    if (typeof clientIp === "string" && clientIp.includes(",")) {
+      clientIp = clientIp.split(",")[0].trim();
+    }
+
+    // Remove IPv4-mapped IPv6 prefix if present
+    if (
+      typeof clientIp === "string" &&
+      clientIp.startsWith("::ffff:")
+    ) {
+      clientIp = clientIp.substring(7);
+    }
+
+    // =========================
+    // VISITOR USER AGENT
+    // =========================
+
+    const clientUserAgent =
+      req.headers["user-agent"] || "";
+
+    // =========================
+    // TRACKING ID
+    // =========================
+
+    const trackingId =
+      `${Date.now()}_${crypto.randomBytes(6).toString("hex")}`;
+
+    console.log("=== ATTRIBUTION DATA ===");
+    console.log("Tracking ID:", trackingId);
+    console.log("Has FBCLID:", !!fbclid);
+    console.log("Has FBC:", !!fbc);
+    console.log("Has FBP:", !!fbp);
+    console.log("Has IP:", !!clientIp);
+    console.log("Has User-Agent:", !!clientUserAgent);
 
     // =========================
     // REDIS HELPER
@@ -61,215 +136,155 @@ export default async function handler(req, res) {
       });
 
       const result = await response.json();
+
       if (!response.ok) {
-        throw new Error(result?.error || "Redis request failed");
+        throw new Error(
+          result?.error || "Redis request failed"
+        );
       }
+
       return result;
     }
 
     // =========================
-    // META CAPI HELPER
+    // CREATE TELEGRAM INVITE LINK
     // =========================
 
-    async function sendMetaEvent(eventData) {
-      const metaUrl = `https://graph.facebook.com/v23.0/${metaPixelId}/events`;
+    const telegramUrl =
+      `https://api.telegram.org/bot${botToken}/createChatInviteLink`;
 
-      const response = await fetch(metaUrl, {
+    const telegramResponse = await fetch(
+      telegramUrl,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          data: [eventData],
-          access_token: metaAccessToken
+          chat_id: channelId,
+
+          // IMPORTANT:
+          // Join request required.
+          // Do NOT use member_limit here.
+          creates_join_request: true,
+
+          // Unique name for easier debugging
+          name: `track_${trackingId}`
         })
-      });
-
-      const result = await response.json();
-      console.log("=== META CAPI RESPONSE ===");
-      console.log(JSON.stringify(result));
-
-      if (!response.ok) {
-        throw new Error(result?.error?.message || "Meta CAPI request failed");
       }
-      return result;
+    );
+
+    const telegramResult =
+      await telegramResponse.json();
+
+    console.log(
+      "=== TELEGRAM API RESPONSE ==="
+    );
+
+    console.log(
+      JSON.stringify(telegramResult)
+    );
+
+    if (
+      !telegramResponse.ok ||
+      !telegramResult?.ok ||
+      !telegramResult?.result?.invite_link
+    ) {
+      throw new Error(
+        telegramResult?.description ||
+        "Failed to create Telegram invite link"
+      );
     }
 
+    const inviteLink =
+      telegramResult.result.invite_link;
+
+    console.log(
+      "✅ Telegram invite created:",
+      inviteLink
+    );
+
     // =========================
-    // TELEGRAM JOIN REQUEST
+    // SAVE META ATTRIBUTION
     // =========================
 
-    if (update.chat_join_request) {
-      const request = update.chat_join_request;
-      const user = request.from;
-      const channelId = request.chat?.id || null;
-      const channelTitle = request.chat?.title || null;
-      const userId = user?.id || null;
-      const username = user?.username || null;
-      const firstName = user?.first_name || null;
-      const lastName = user?.last_name || null;
-      const inviteLink = request.invite_link?.invite_link || null;
-      const requestDate = request.date || Math.floor(Date.now() / 1000);
+    const attribution = {
+      tracking_id: trackingId,
 
-      console.log("=== JOIN REQUEST RECEIVED ===");
-      console.log("Channel:", channelTitle);
-      console.log("Channel ID:", channelId);
-      console.log("User ID:", userId);
-      console.log("Username:", username);
-      console.log("Invite Link:", inviteLink);
-      console.log("Request Date:", requestDate);
+      invite_link: inviteLink,
 
-      // =========================
-      // SAVE TELEGRAM JOIN
-      // =========================
+      fbclid: fbclid || null,
 
-      const joinData = {
-        event: "telegram_join_request",
-        channel_id: channelId,
-        channel_title: channelTitle,
-        telegram_user_id: userId,
-        username: username,
-        first_name: firstName,
-        last_name: lastName,
-        invite_link: inviteLink,
-        request_date: requestDate,
-        received_at: new Date().toISOString()
-      };
+      fbc: fbc || null,
 
-      const joinRedisKey = inviteLink
-        ? `telegram_join:${inviteLink}`
-        : `telegram_join:user:${userId}:${requestDate}`;
+      fbp: fbp || null,
 
-      await redisCommand([
-        "SET",
-        joinRedisKey,
-        JSON.stringify(joinData),
-        "EX",
-        "2592000"
-      ]);
+      // IMPORTANT:
+      // These are the LANDING PAGE visitor's
+      // IP and User-Agent.
+      client_ip_address:
+        clientIp || null,
 
-      console.log("✅ Join request saved to Redis");
-      console.log("Redis Key:", joinRedisKey);
+      client_user_agent:
+        clientUserAgent || null,
 
-      // =========================
-      // FIND META ATTRIBUTION
-      // =========================
+      created_at:
+        new Date().toISOString()
+    };
 
-      if (!inviteLink) {
-        console.log("⚠️ No invite link found");
-        return res.status(200).json({
-          ok: true,
-          message: "Join request saved, no invite link"
-        });
-      }
+    const attributionKey =
+      `telegram_attribution:${encodeURIComponent(
+        inviteLink
+      )}`;
 
-      const attributionKey = `telegram_attribution:${encodeURIComponent(inviteLink)}`;
-      console.log("Looking for attribution:", attributionKey);
+    await redisCommand([
+      "SET",
+      attributionKey,
+      JSON.stringify(attribution),
+      "EX",
+      "2592000"
+    ]);
 
-      const attributionResult = await redisCommand(["GET", attributionKey]);
-      let attribution = null;
+    console.log(
+      "✅ Attribution saved to Redis"
+    );
 
-      if (attributionResult?.result) {
-        try {
-          attribution = JSON.parse(attributionResult.result);
-        } catch (error) {
-          console.error("❌ Attribution JSON parse error", error);
-        }
-      }
+    console.log(
+      "Redis Key:",
+      attributionKey
+    );
 
-      if (!attribution) {
-        console.log("⚠️ No Meta attribution found");
-        return res.status(200).json({
-          ok: true,
-          message: "Join request saved, attribution not found"
-        });
-      }
+    console.log(
+      "Tracking ID:",
+      trackingId
+    );
 
-      console.log("=== META ATTRIBUTION FOUND ===");
-      console.log("Tracking ID:", attribution.tracking_id);
-      console.log("Has FBC:", !!attribution.fbc);
-      console.log("Has FBP:", !!attribution.fbp);
-      console.log("Has FBCLID:", !!attribution.fbclid);
-
-      // =========================
-      // META USER DATA (UPDATED FIX)
-      // =========================
-      
-      // Request se IP aur User-Agent extract kar rahe hain
-      let clientIp = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '127.0.0.1';
-      if (clientIp.includes(',')) {
-          clientIp = clientIp.split(',')[0].trim();
-      }
-      
-      const userAgent = req.headers['user-agent'] || 'Telegram Webhook';
-
-      // Meta requires client_ip_address and client_user_agent minimum
-      const userData = {
-        client_ip_address: attribution.client_ip_address || clientIp,
-        client_user_agent: attribution.client_user_agent || userAgent
-      };
-
-      if (attribution.fbc) {
-        userData.fbc = attribution.fbc;
-      }
-
-      if (attribution.fbp) {
-        userData.fbp = attribution.fbp;
-      }
-
-      // =========================
-      // META EVENT
-      // =========================
-
-      const eventTime = Number(requestDate) || Math.floor(Date.now() / 1000);
-      const eventId = attribution.tracking_id || `${userId}_${eventTime}`;
-
-      const metaEvent = {
-        event_name: "Subscribe",
-        event_time: eventTime,
-        event_id: eventId,
-        action_source: "website",
-        user_data: userData,
-        custom_data: {
-          telegram_user_id: String(userId || ""),
-          telegram_username: username || "",
-          telegram_channel_id: String(channelId || ""),
-          telegram_channel_title: channelTitle || ""
-        }
-      };
-
-      console.log("=== SENDING META CAPI EVENT ===");
-      console.log("Event:", metaEvent.event_name);
-      console.log("Event ID:", eventId);
-
-      // =========================
-      // SEND TO META
-      // =========================
-
-      const metaResult = await sendMetaEvent(metaEvent);
-      console.log("✅ META SUBSCRIBE EVENT SENT");
-      console.log("Events received:", metaResult?.events_received);
-
-      return res.status(200).json({
-        ok: true,
-        telegram: "join_request_saved",
-        attribution: "found",
-        meta: "Subscribe_sent",
-        events_received: metaResult?.events_received || 0
-      });
-    }
+    // =========================
+    // RESPONSE
+    // =========================
 
     return res.status(200).json({
       ok: true,
-      message: "Update received"
+
+      invite_link: inviteLink,
+
+      tracking_id: trackingId,
+
+      attribution_saved: true
     });
 
   } catch (error) {
-    console.error("❌ TELEGRAM WEBHOOK ERROR");
+    console.error(
+      "❌ TELEGRAM LINK ERROR"
+    );
+
     console.error(error);
+
     return res.status(500).json({
       ok: false,
-      error: error.message
+      error:
+        error?.message ||
+        "Internal server error"
     });
   }
 }
