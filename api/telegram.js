@@ -1,11 +1,7 @@
-import { createHash } from "crypto";
+import crypto from "crypto";
 
 export default async function handler(req, res) {
   console.log("=== TELEGRAM WEBHOOK HIT ===");
-
-  // =========================
-  // ONLY POST
-  // =========================
 
   if (req.method !== "POST") {
     return res.status(200).json({
@@ -15,9 +11,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    // =========================
+    // =========================================
     // TELEGRAM WEBHOOK SECRET
-    // =========================
+    // =========================================
 
     const expectedSecret =
       process.env.TELEGRAM_WEBHOOK_SECRET;
@@ -29,9 +25,7 @@ export default async function handler(req, res) {
       expectedSecret &&
       receivedSecret !== expectedSecret
     ) {
-      console.log(
-        "❌ Invalid Telegram webhook secret"
-      );
+      console.log("❌ Invalid Telegram webhook secret");
 
       return res.status(401).json({
         ok: false,
@@ -41,13 +35,11 @@ export default async function handler(req, res) {
 
     const update = req.body;
 
-    console.log(
-      "Telegram update received"
-    );
+    console.log("Telegram update received");
 
-    // =========================
+    // =========================================
     // ENVIRONMENT VARIABLES
-    // =========================
+    // =========================================
 
     const redisUrl =
       process.env.KV_REST_API_URL;
@@ -83,27 +75,21 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================
+    // =========================================
     // REDIS HELPER
-    // =========================
+    // =========================================
 
     async function redisCommand(command) {
       const response = await fetch(redisUrl, {
         method: "POST",
-
         headers: {
-          "Content-Type":
-            "application/json",
-
-          Authorization:
-            `Bearer ${redisToken}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${redisToken}`
         },
-
         body: JSON.stringify(command)
       });
 
-      const result =
-        await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -115,9 +101,20 @@ export default async function handler(req, res) {
       return result;
     }
 
-    // =========================
+    // =========================================
+    // SHA256 HELPER
+    // =========================================
+
+    function sha256(value) {
+      return crypto
+        .createHash("sha256")
+        .update(String(value))
+        .digest("hex");
+    }
+
+    // =========================================
     // META CAPI HELPER
-    // =========================
+    // =========================================
 
     async function sendMetaEvent(eventData) {
       const metaUrl =
@@ -128,98 +125,57 @@ export default async function handler(req, res) {
         access_token: metaAccessToken
       };
 
-      console.log(
-        "=== META REQUEST ==="
-      );
-
+      console.log("=== META CAPI REQUEST ===");
       console.log(
         JSON.stringify({
-          event_name:
-            eventData.event_name,
-
-          event_id:
-            eventData.event_id,
-
-          action_source:
-            eventData.action_source,
-
-          has_fbc:
-            !!eventData.user_data?.fbc,
-
-          has_fbp:
-            !!eventData.user_data?.fbp,
-
-          has_external_id:
-            !!eventData.user_data?.external_id
+          data: [
+            {
+              ...eventData,
+              user_data: {
+                ...eventData.user_data,
+                external_id: "[HASHED]"
+              }
+            }
+          ],
+          access_token: "[HIDDEN]"
         })
       );
 
-      const response =
-        await fetch(metaUrl, {
-          method: "POST",
+      const response = await fetch(metaUrl, {
+        method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-          body:
-            JSON.stringify(payload)
-        });
+        body: JSON.stringify(payload)
+      });
 
-      const result =
-        await response.json();
+      const result = await response.json();
 
-      console.log(
-        "=== META CAPI RESPONSE ==="
-      );
+      console.log("=== META CAPI RESPONSE ===");
+      console.log(JSON.stringify(result));
 
-      console.log(
-        JSON.stringify(result)
-      );
-
-      // IMPORTANT:
-      // Meta fail hone par Telegram ko
-      // 500 nahi dena.
       if (!response.ok) {
-        console.error(
-          "❌ META CAPI FAILED"
-        );
-
-        console.error(
+        throw new Error(
           result?.error?.message ||
-          "Unknown Meta error"
+          "Meta CAPI request failed"
         );
-
-        return {
-          events_received: 0,
-
-          meta_error:
-            result?.error?.message ||
-            "Meta CAPI request failed",
-
-          meta_error_code:
-            result?.error?.code || null,
-
-          meta_error_subcode:
-            result?.error?.error_subcode ||
-            null
-        };
       }
 
       return result;
     }
 
-    // =========================
+    // =========================================
     // TELEGRAM JOIN REQUEST
-    // =========================
+    // =========================================
 
     if (update.chat_join_request) {
       const request =
         update.chat_join_request;
 
       const user =
-        request.from;
+        request.from || {};
 
       const channelId =
         request.chat?.id || null;
@@ -228,26 +184,23 @@ export default async function handler(req, res) {
         request.chat?.title || null;
 
       const userId =
-        user?.id || null;
+        user.id || null;
 
       const username =
-        user?.username || null;
+        user.username || null;
 
       const firstName =
-        user?.first_name || null;
+        user.first_name || null;
 
       const lastName =
-        user?.last_name || null;
+        user.last_name || null;
 
       const inviteLink =
-        request.invite_link?.invite_link ||
-        null;
+        request.invite_link?.invite_link || null;
 
       const requestDate =
         request.date ||
-        Math.floor(
-          Date.now() / 1000
-        );
+        Math.floor(Date.now() / 1000);
 
       console.log(
         "=== JOIN REQUEST RECEIVED ==="
@@ -278,42 +231,28 @@ export default async function handler(req, res) {
         inviteLink
       );
 
-      console.log(
-        "Request Date:",
-        requestDate
-      );
-
-      // =========================
-      // SAVE TELEGRAM JOIN
-      // =========================
+      // =========================================
+      // SAVE JOIN REQUEST
+      // =========================================
 
       const joinData = {
-        event:
-          "telegram_join_request",
+        event: "telegram_join_request",
 
-        channel_id:
-          channelId,
+        channel_id: channelId,
 
-        channel_title:
-          channelTitle,
+        channel_title: channelTitle,
 
-        telegram_user_id:
-          userId,
+        telegram_user_id: userId,
 
-        username:
-          username,
+        username: username,
 
-        first_name:
-          firstName,
+        first_name: firstName,
 
-        last_name:
-          lastName,
+        last_name: lastName,
 
-        invite_link:
-          inviteLink,
+        invite_link: inviteLink,
 
-        request_date:
-          requestDate,
+        request_date: requestDate,
 
         received_at:
           new Date().toISOString()
@@ -326,13 +265,9 @@ export default async function handler(req, res) {
 
       await redisCommand([
         "SET",
-
         joinRedisKey,
-
         JSON.stringify(joinData),
-
         "EX",
-
         "2592000"
       ]);
 
@@ -340,14 +275,9 @@ export default async function handler(req, res) {
         "✅ Join request saved to Redis"
       );
 
-      console.log(
-        "Redis Key:",
-        joinRedisKey
-      );
-
-      // =========================
-      // INVITE LINK CHECK
-      // =========================
+      // =========================================
+      // CHECK INVITE LINK
+      // =========================================
 
       if (!inviteLink) {
         console.log(
@@ -356,15 +286,14 @@ export default async function handler(req, res) {
 
         return res.status(200).json({
           ok: true,
-
           message:
             "Join request saved, no invite link"
         });
       }
 
-      // =========================
+      // =========================================
       // FIND ATTRIBUTION
-      // =========================
+      // =========================================
 
       const attributionKey =
         `telegram_attribution:${encodeURIComponent(
@@ -382,12 +311,9 @@ export default async function handler(req, res) {
           attributionKey
         ]);
 
-      let attribution =
-        null;
+      let attribution = null;
 
-      if (
-        attributionResult?.result
-      ) {
+      if (attributionResult?.result) {
         try {
           attribution =
             JSON.parse(
@@ -401,10 +327,6 @@ export default async function handler(req, res) {
         }
       }
 
-      // =========================
-      // NO ATTRIBUTION
-      // =========================
-
       if (!attribution) {
         console.log(
           "⚠️ No Meta attribution found"
@@ -412,11 +334,14 @@ export default async function handler(req, res) {
 
         return res.status(200).json({
           ok: true,
-
           message:
             "Join request saved, attribution not found"
         });
       }
+
+      // =========================================
+      // ATTRIBUTION LOGS
+      // =========================================
 
       console.log(
         "=== META ATTRIBUTION FOUND ==="
@@ -442,9 +367,19 @@ export default async function handler(req, res) {
         !!attribution.fbclid
       );
 
-      // =========================
+      console.log(
+        "Has Client IP:",
+        !!attribution.client_ip_address
+      );
+
+      console.log(
+        "Has User Agent:",
+        !!attribution.client_user_agent
+      );
+
+      // =========================================
       // META USER DATA
-      // =========================
+      // =========================================
 
       const userData = {};
 
@@ -460,76 +395,49 @@ export default async function handler(req, res) {
           attribution.fbp;
       }
 
-      // =========================
-      // TELEGRAM USER ID
-      // SHA256 HASH
-      // =========================
-
-      if (userId) {
-        const hashedTelegramId =
-          createHash("sha256")
-            .update(
-              String(userId)
-            )
-            .digest("hex");
-
-        // Meta external_id is sent
-        // as an array.
-        userData.external_id = [
-          hashedTelegramId
-        ];
-
-        console.log(
-          "✅ Hashed Telegram external_id created"
-        );
+      // REAL CLIENT IP FROM LANDING PAGE
+      if (attribution.client_ip_address) {
+        userData.client_ip_address =
+          attribution.client_ip_address;
       }
 
-      console.log(
-        "Meta User Data:",
-        JSON.stringify({
-          has_fbc:
-            !!userData.fbc,
+      // REAL BROWSER USER AGENT
+      if (attribution.client_user_agent) {
+        userData.client_user_agent =
+          attribution.client_user_agent;
+      }
 
-          has_fbp:
-            !!userData.fbp,
+      // =========================================
+      // TELEGRAM USER ID AS HASHED EXTERNAL ID
+      // =========================================
 
-          has_external_id:
-            !!userData.external_id
-        })
-      );
+      if (userId) {
+        userData.external_id =
+          sha256(userId);
+      }
 
-      // =========================
+      // =========================================
       // META EVENT
-      // =========================
+      // =========================================
 
       const eventTime =
         Number(requestDate) ||
-        Math.floor(
-          Date.now() / 1000
-        );
+        Math.floor(Date.now() / 1000);
 
       const eventId =
         attribution.tracking_id ||
         `${userId}_${eventTime}`;
 
       const metaEvent = {
-        event_name:
-          "Subscribe",
+        event_name: "Subscribe",
 
-        event_time:
-          eventTime,
+        event_time: eventTime,
 
-        event_id:
-          eventId,
+        event_id: eventId,
 
-        action_source:
-          "website",
+        action_source: "website",
 
-        event_source_url:
-          "https://b2-express.vercel.app/",
-
-        user_data:
-          userData,
+        user_data: userData,
 
         custom_data: {
           telegram_user_id:
@@ -560,44 +468,48 @@ export default async function handler(req, res) {
         eventId
       );
 
-      // =========================
-      // SEND META
-      // =========================
+      console.log(
+        "Has External ID:",
+        !!userData.external_id
+      );
+
+      console.log(
+        "Has FBC:",
+        !!userData.fbc
+      );
+
+      console.log(
+        "Has FBP:",
+        !!userData.fbp
+      );
+
+      console.log(
+        "Has Client IP:",
+        !!userData.client_ip_address
+      );
+
+      console.log(
+        "Has User Agent:",
+        !!userData.client_user_agent
+      );
+
+      // =========================================
+      // SEND META CAPI
+      // =========================================
 
       const metaResult =
         await sendMetaEvent(
           metaEvent
         );
 
-      // =========================
-      // META RESULT
-      // =========================
+      console.log(
+        "✅ META SUBSCRIBE EVENT SENT"
+      );
 
-      if (
+      console.log(
+        "Events received:",
         metaResult?.events_received
-      ) {
-        console.log(
-          "✅ META SUBSCRIBE EVENT SENT"
-        );
-
-        console.log(
-          "Events received:",
-          metaResult.events_received
-        );
-      } else {
-        console.log(
-          "⚠️ META SUBSCRIBE WAS NOT ACCEPTED"
-        );
-
-        console.log(
-          "Meta error:",
-          metaResult?.meta_error
-        );
-      }
-
-      // =========================
-      // ALWAYS RETURN 200
-      // =========================
+      );
 
       return res.status(200).json({
         ok: true,
@@ -609,32 +521,24 @@ export default async function handler(req, res) {
           "found",
 
         meta:
-          metaResult?.events_received
-            ? "Subscribe_sent"
-            : "Subscribe_failed",
+          "Subscribe_sent",
 
         events_received:
-          metaResult?.events_received ||
-          0,
-
-        meta_error:
-          metaResult?.meta_error ||
-          null
+          metaResult?.events_received || 0
       });
     }
 
-    // =========================
+    // =========================================
     // OTHER TELEGRAM UPDATES
-    // =========================
+    // =========================================
 
     return res.status(200).json({
       ok: true,
-
-      message:
-        "Update received"
+      message: "Update received"
     });
 
   } catch (error) {
+
     console.error(
       "❌ TELEGRAM WEBHOOK ERROR"
     );
@@ -643,10 +547,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       ok: false,
-
-      error:
-        error?.message ||
-        "Unknown error"
+      error: error.message
     });
   }
 }
